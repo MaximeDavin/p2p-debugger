@@ -1,0 +1,14 @@
+{
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": "latest"
+  },
+  "extends": ["next/core-web-vitals","eslint:recommended"],
+  "plugins": ["simple-import-sort", "import", "jest"],
+  "rules": {
+    "simple-import-sort/imports": "error",
+    "import/first": "error",
+    "import/newline-after-import": "error",
+    "import/no-duplicates": "error"
+  }
+}

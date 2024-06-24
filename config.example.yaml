@@ -1,0 +1,7 @@
+chain_name: "Local TestNet"
+reload_interval: "10s" # Default to 10s. Set to 0 disable automatic refresh
+clients:
+  - name: "cl-1-lighthouse-geth"
+    url: "http://127.0.0.1:6064"
+  - name: "cl-2-lighthouse-geth"
+    url: "http://127.0.0.1:6063"
