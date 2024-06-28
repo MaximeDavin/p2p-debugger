@@ -1,6 +1,6 @@
 "use client";
 
-import { LoadingOverlay } from "@mantine/core";
+import { LoadingOverlay, Paper, Text } from "@mantine/core";
 
 import { useAllData, useConfig } from "@/hooks";
 
@@ -11,9 +11,19 @@ export default function MainContainer() {
   const {
     config: { clients, reload_interval },
     isLoading,
+    error,
   } = useConfig();
 
   const { nodes } = useAllData(clients, reload_interval);
+
+  if (error)
+    return (
+      <Paper>
+        <Text size="md" c="red" fw="500">
+          {error.message}
+        </Text>
+      </Paper>
+    );
 
   return (
     <>

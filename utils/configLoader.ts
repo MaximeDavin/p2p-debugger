@@ -1,4 +1,5 @@
 import ems from "enhanced-ms";
+import { parse } from "yaml";
 
 import { Config, UnverifiedConfig } from "@/types";
 
@@ -8,9 +9,20 @@ export const defaultConfig: Config = {
   clients: [],
 };
 
-export const verifyConfig = (unverifiedConfig: UnverifiedConfig): Config => {
+export const parseConfig = (configData: string): Config => {
+  try {
+    const yamlData = parse(configData);
+    const config = yamlData as UnverifiedConfig;
+    return verifyConfig(config);
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+};
+
+const verifyConfig = (unverifiedConfig: UnverifiedConfig): Config => {
   if (!unverifiedConfig) {
-    throw new Error("Configuration: config file empty");
+    throw new Error("Configuration error: config file empty");
   }
   const config = { ...defaultConfig };
 
@@ -20,13 +32,19 @@ export const verifyConfig = (unverifiedConfig: UnverifiedConfig): Config => {
   if (unverifiedConfig.reload_interval)
     config.reload_interval = ems(unverifiedConfig.reload_interval);
 
+  if (!Array.isArray(unverifiedConfig.clients)) {
+    throw new Error("Configuration error: clients must be an array.");
+  }
+
   if (!unverifiedConfig.clients) {
-    throw new Error("Configuration: clients array is empty or not defined.");
+    throw new Error(
+      "Configuration error: clients array is empty or not defined."
+    );
   }
   unverifiedConfig.clients.forEach((client, index) => {
     if (!client.name || !client.url) {
       throw new Error(
-        `Configuration: client invalid at index ${index} (must have 'name' and 'url').`
+        `Configuration error: client invalid at index ${index} (must have 'name' and 'url').`
       );
     }
   });
